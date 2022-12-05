@@ -12,9 +12,9 @@ const spotifyApi = new SpotifyWebApi({
 const SongCard = ({ playingTrack }) => {
 
   return (
-    <Box bg="gray.700" w="sm" borderRadius="lg">
+    <Box bg="gray.700" minW="sm" maxW="lg" borderRadius="lg">
       <HStack p="3" spacing="6" w="100%" align="center">
-        <Image src={playingTrack.img} boxSize="30%" fallbackSrc='https://via.placeholder.com/128' />
+        <Image src={playingTrack.img} w="128px" h="128px" fallbackSrc='https://via.placeholder.com/128' objectFit="contain" />
         <VStack w="100%" align="left" spacing="0">
           <Text fontSize="xl" fontWeight="bold">{playingTrack.name}</Text>
           <Text fontSize="lg">{playingTrack.artists[0].name}</Text>
@@ -40,10 +40,11 @@ export default function Dashboard({ code }) {
 
   const [pushToTeams, changePushToTeams] = useState(false)
 
-  const TEAMS_TOKEN = "eyJ0eXAiOiJKV1QiLCJub25jZSI6IkdUdlVueXNjZDg1bW43aTdHM0xRdDk1RmtQVWdrTFJUaGoxSEhaQmhQdjgiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiJodHRwczovL3ByZXNlbmNlLnRlYW1zLm1pY3Jvc29mdC5jb20vIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvYTFjZDM0MzYtNjA2Mi00MTY5LWExYmQtNzllZmRjZmQ4YTVlLyIsImlhdCI6MTY3MDAxMzI5MywibmJmIjoxNjcwMDEzMjkzLCJleHAiOjE2NzAwOTMyOTgsImFjciI6IjEiLCJhaW8iOiJBVlFBcS84VEFBQUE0MGpKVGxnSHlKZm9WRU5UVGZMODVDT3ZEMEo1eHZUY2NtTHpXNm5QNkY4N3NSRFUxUjA2YTJMc05HaUJqZ0ZwUlo0Q1NpWUNIL3dHSFh2TXRhSy9ISnNxVmZldytRaDVTQ0tpckxZTkFmST0iLCJhbXIiOlsicHdkIiwid2lhIiwibWZhIl0sImFwcGlkIjoiNWUzY2U2YzAtMmIxZi00Mjg1LThkNGItNzVlZTc4Nzg3MzQ2IiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJDb2xvbSIsImdpdmVuX25hbWUiOiJSaWNhcmRvIiwiaXBhZGRyIjoiNTAuMTg1LjEyOS42NSIsIm5hbWUiOiJSaWNhcmRvIENvbG9tIiwib2lkIjoiMjEwYWY4NmYtYWEzNy00ZTRiLTgxMDktNzFkNmRjZDQyN2EwIiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTExMzcxMDU5Ni0zMTE4MjQwNTgtNzMwNzM1NjQwLTI5NzI3IiwicHVpZCI6IjEwMDMyMDAyNDZFMjA5OUQiLCJyaCI6IjAuQVN3QU5qVE5vV0pnYVVHaHZYbnYzUDJLWGlmTmNCNEhSNGxGanNXYjBneEhLa1lzQUR3LiIsInNjcCI6InVzZXJfaW1wZXJzb25hdGlvbiIsInN1YiI6InFwa3JQX3M2YjYwNW85RElObzRIaFhFMlhTQzdJSS1FQ2pKUWtPUWZBdnciLCJ0aWQiOiJhMWNkMzQzNi02MDYyLTQxNjktYTFiZC03OWVmZGNmZDhhNWUiLCJ1bmlxdWVfbmFtZSI6InJpY2FyZG8uY29sb21Aa2FzZXlhLmNvbSIsInVwbiI6InJpY2FyZG8uY29sb21Aa2FzZXlhLmNvbSIsInV0aSI6IjZNOFBpU1BTTjBheUFDOV9vVnQ3QUEiLCJ2ZXIiOiIxLjAiLCJ4bXNfY2MiOlsiQ1AxIl0sInhtc19zc20iOiIxIn0.X4sdHgOctbdB8yzLru-gbDa7rrA1n9_N37UHQPxI7gMHpcZGumzTQKR7oKiIgzjh0IaqGQ-5hkYjmaGMqMz22hgwJokcg6tSBl3a2INrn_B3d7hXNn4RBqaITrxwQVoCSYwLyg7wsW5QHaBEnogNsPJc3rm7o3so2m1qBtXU1LmNCtwgtMEKw397CVd9jcVIk08XnIr6mc88mPcBMCPEZx0duZNKOWo31IosLesrmhHbQcKHouzFVUSqxtmsKG3SDDSSCgk4WGcf67rQuNmm4Lf38YRjuq7eB5Hzf-6w9ZerbKeNd--4nT890rftAFhZnWZUHlpF3FL3by9Rsyaa_g"
+  const TEAMS_TOKEN = "eyJ0eXAiOiJKV1QiLCJub25jZSI6IlFSMklsMmxFNVFHYU4tOHM1VW1MYXNoaXp4WkpUbmZIVG5PVF85bVdEYkkiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiJodHRwczovL2FwaS5zcGFjZXMuc2t5cGUuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvYTFjZDM0MzYtNjA2Mi00MTY5LWExYmQtNzllZmRjZmQ4YTVlLyIsImlhdCI6MTY3MDI1NDIxNiwibmJmIjoxNjcwMjU0MjE2LCJleHAiOjE2NzAzMjk1NTMsImFjY3QiOjAsImFjciI6IjEiLCJhaW8iOiJBVVFBdS84VEFBQUFjcjJlREtiOGxzYkQxTjVNZHFsa0tsb3BTa2VqTVUyT0xJQUZrQlEwdXU4TThwY1JkdHlvS0M3b2x4T08xcXYxS2JXT0pJU1VtS2ZSTUV1M2ppMkxzUT09IiwiYW1yIjpbInB3ZCIsIndpYSIsIm1mYSJdLCJhcHBpZCI6IjVlM2NlNmMwLTJiMWYtNDI4NS04ZDRiLTc1ZWU3ODc4NzM0NiIsImFwcGlkYWNyIjoiMCIsImF1dGhfdGltZSI6MTY3MDI1NDUxMywiZmFtaWx5X25hbWUiOiJDb2xvbSIsImdpdmVuX25hbWUiOiJSaWNhcmRvIiwiaXBhZGRyIjoiMTcwLjU1LjE0NS4yNDIiLCJuYW1lIjoiUmljYXJkbyBDb2xvbSIsIm9pZCI6IjIxMGFmODZmLWFhMzctNGU0Yi04MTA5LTcxZDZkY2Q0MjdhMCIsIm9ucHJlbV9zaWQiOiJTLTEtNS0yMS0xMTM3MTA1OTYtMzExODI0MDU4LTczMDczNTY0MC0yOTcyNyIsInB1aWQiOiIxMDAzMjAwMjQ2RTIwOTlEIiwicmgiOiIwLkFTd0FOalROb1dKZ2FVR2h2WG52M1AyS1hsZjlGY3hzTEJkQnFJeURzZFZyUzc0c0FEdy4iLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzaWQiOiI5ZmE5OGU5NS05NDVjLTRiOGItYTNhNS1mZjRkY2E3ZjUyNDUiLCJzdWIiOiJsUUVZRHdPdkt1RU5acU80aTJfQ2tOamZXNFhCTlZxQ0NINE9IdFBnV1NzIiwidGlkIjoiYTFjZDM0MzYtNjA2Mi00MTY5LWExYmQtNzllZmRjZmQ4YTVlIiwidW5pcXVlX25hbWUiOiJyaWNhcmRvLmNvbG9tQGthc2V5YS5jb20iLCJ1cG4iOiJyaWNhcmRvLmNvbG9tQGthc2V5YS5jb20iLCJ1dGkiOiJiTzN5Z3NLMTkwaWZUdk1YaUVUSEFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX2NjIjpbIkNQMSJdLCJ4bXNfc3NtIjoiMSJ9.FyNjE3wFitx9xDHt-g-u0pu0ML3zxNBSMXyIq6b6emPALggYCr224fActO7flMToPG_MAPS_xBoyUBBjfBorFr-D02AICCDqwNO-HRY771yd5kPaDt4ySX1srEnJhBgKdmwk8KK0tN2W3v32IIRg-OCGpB5C-ZeGen6UkFWyvY6hZ1FQCD1r1Tqz7i1M6Enu7K0Aqj05DLV8wxfRFkGSXsrjZ5hF-vRSrdRC7d0WWXsuL9rf8O97L2gtenfANPfMHBbc4PHGQGK8JKvpwAdfXt458nz_KaTOAOAD1BSQU1sLhIXwzb8cg8ZhnbN_uQdmu5S3YRagApID_7Dy_oJipQ"
 
   function forcePushToTeams() {
-    let message = playingTrack.name;
+    let message = { "message": "[𝗦𝗽𝗼𝘁𝗶𝗳𝘆] 𝗟𝗶𝘀𝘁𝗲𝗻𝗶𝗻𝗴 𝘁𝗼: " + playingTrack.artists[0].name + " - " + playingTrack.name };
+    console.log("Pushing to teams...")
     axios.put("http://localhost:4000/status", message, {
       headers: {
         "Content-Type": "application/json",
@@ -67,32 +68,50 @@ export default function Dashboard({ code }) {
   function getCurrentSong() {
     spotifyApi.getMyCurrentPlayingTrack()
       .then(function (data) {
-        let name = data.body.item.name
-        let artists = data.body.item.artists
-        let album_name = data.body.item.album.name
-        let img = data.body.item.album.images[0].url
+        if (data.body != null) {
+          let name = data.body.item.name
+          let artists = data.body.item.artists
+          let album_name = data.body.item.album.name
+          let img = data.body.item.album.images[0].url
 
-        setPlayingTrack(
-          {
-            name, artists, album_name, img
-          }
-        )
+          setPlayingTrack(
+            {
+              name, artists, album_name, img
+            }
+          )
+
+          console.log(artists[0].name + " - " + name)
+        }
       }, function (err) {
         console.log('Something went wrong!', err);
       })
   }
 
   useEffect(() => {
+    console.log("test")
     if (accessToken != undefined) {
       console.log(accessToken)
       spotifyApi.setAccessToken(accessToken)
       getUserInfo();
-      const interval = setInterval(() => { getCurrentSong() }, 1000);
+      getCurrentSong();
 
-      return () => clearInterval(interval)
+      const getSongInterval = setInterval(() => { getCurrentSong() }, 1000);
+
+      return () => clearInterval(getSongInterval)
     }
 
   }, [accessToken])
+
+  useEffect(() => {
+
+    console.log("pushToTeams: " + pushToTeams)
+
+    if (pushToTeams) {
+      const pushToTeamsInterval = setInterval(() => { forcePushToTeams() }, 10000)
+
+      return () => clearInterval(pushToTeamsInterval)
+    }
+  }, [pushToTeams])
 
   const DashboardContent = () => {
     if (accessToken != undefined) {
@@ -102,7 +121,7 @@ export default function Dashboard({ code }) {
           <SongCard playingTrack={playingTrack} />
           <Box bg="gray.700" minH="16" borderRadius="lg">
             <HStack p="4" px="8" w="100%" h="100%" align="center" justify="center">
-              <Checkbox size="lg" colorScheme="purple" spacing="4">
+              <Checkbox size="lg" colorScheme="purple" spacing="4" onChange={(e) => { changePushToTeams(e.target.checked) }}>
                 <Text>Auto push to Teams</Text>
               </Checkbox>
             </HStack>
