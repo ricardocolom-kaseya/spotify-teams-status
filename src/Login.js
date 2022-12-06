@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker"
 
 import { pickRandomSong } from './SongList'
 
-const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=a248cdcebd804022917a3c7fc1d66d76&response_type=code&redirect_uri=http://localhost:3000&scope=user-read-playback-state%20user-read-currently-playing`
+const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=a248cdcebd804022917a3c7fc1d66d76&response_type=code&redirect_uri=http://localhost:3000&scope=user-read-playback-state%20user-read-currently-playing%20user-modify-playback-state`
 
 export default function Login() {
 
