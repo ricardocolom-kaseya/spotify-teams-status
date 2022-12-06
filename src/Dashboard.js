@@ -14,7 +14,7 @@ const SongCard = ({ playingTrack }) => {
   return (
     <Box bg="gray.700" minW="sm" maxW="lg" borderRadius="lg">
       <HStack p="3" spacing="6" w="100%" align="center">
-        <Image src={playingTrack.img} w="128px" h="128px" fallbackSrc='https://via.placeholder.com/128' objectFit="contain" />
+        <Image src={playingTrack.img} w="128px" h="128px" fallbackSrc='https://via.placeholder.com/128/FFFFFF/000000' objectFit="contain" borderRadius="md"/>
         <VStack w="100%" align="left" spacing="0">
           <Text fontSize="xl" fontWeight="bold">{playingTrack.name}</Text>
           <Text fontSize="lg">{playingTrack.artists[0].name}</Text>
@@ -52,6 +52,23 @@ export default function Dashboard({ code }) {
         if (playbackData.body != null && playbackData.body.is_playing) {
           //console.log(playingTrack)
           let message = { "message": "[𝗦𝗽𝗼𝘁𝗶𝗳𝘆] 𝗟𝗶𝘀𝘁𝗲𝗻𝗶𝗻𝗴 𝘁𝗼: " + playingTrack.artists[0].name + " - " + playingTrack.name };
+
+          let artists = []
+
+          playingTrack.artists.forEach(artist => {
+            artists.push(artist.name)            
+          });
+
+          let out = {
+            name: playingTrack.name,
+            album_name: playingTrack.album_name,
+            artists,
+            img: playingTrack.img,
+            id: playingTrack.id,
+          }
+
+          console.log(JSON.stringify(out, null, 2))
+
           console.log("Pushing to teams...")
           console.log(message.message)
           axios.put("http://localhost:4000/status", message, {
@@ -95,8 +112,7 @@ export default function Dashboard({ code }) {
                 let id = trackData.body.item.id
 
                 // Only call setPlayingTrack if the current track id is different from the one in the state
-                if(id != playingTrack.id)
-                {
+                if (id != playingTrack.id) {
                   console.log(id)
                   console.log(playingTrack)
                   setPlayingTrack(
@@ -124,7 +140,7 @@ export default function Dashboard({ code }) {
       getUserInfo();
       getCurrentSong();
 
-      const getSongInterval = setInterval(() => { getCurrentSong()}, 1000);
+      const getSongInterval = setInterval(() => { getCurrentSong() }, 1000);
 
       return () => clearInterval(getSongInterval)
     }
