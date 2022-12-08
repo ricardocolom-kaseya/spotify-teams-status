@@ -55,18 +55,43 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [modalToken, setModalToken] = useState("")
-  const [doSave, setDoSave] = useState("false")
+  const [doSave, setDoSave] = useState(false)
+
+  function onTrySave() {
+    console.log("Trying to save...")
+    let message = {}
+    axios.put("http://localhost:4000/status", message, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${modalToken}`
+      }
+    }).then(res => {
+      if (res.data == 'OK') {
+        console.log(res.data)
+        setDoSave(true)
+        onClose();
+      }
+    }).catch((err) => {
+      console.log(err.response.status)
+      console.log("Token is invalid or expired, please copy a new one")
+    })
+  }
 
   const teamsButton = () => {
     if (teamsToken) {
       return (
-        <Button colorScheme="purple" size="sm" variant="ghost" p="0">
-          <LightMode>
-            <Checkbox size="lg" colorScheme="purple" spacing="4" p="4" onChange={(e) => { setPushToTeams(e.target.checked); window.localStorage.setItem("pushToTeams", e.target.checked) }} defaultChecked={window.localStorage.getItem("pushToTeams") == "true" ? true : false}>
-              <Text color="white">Push to Teams</Text>
-            </Checkbox>
-          </LightMode>
-        </Button>
+        <HStack w="100%" justify="space-around">
+          <Button colorScheme="purple" size="sm" variant="ghost" p="0">
+            <LightMode>
+              <Checkbox size="md" colorScheme="purple" spacing="4" p="4" onChange={(e) => { setPushToTeams(e.target.checked); window.localStorage.setItem("pushToTeams", e.target.checked) }} defaultChecked={window.localStorage.getItem("pushToTeams") == "true" ? true : false}>
+                <Text color="white">Push to Teams</Text>
+              </Checkbox>
+            </LightMode>
+          </Button>
+          <Button colorScheme="red" variant="outline" size="sm" onClick={() => { setTeamsToken(undefined) }}>
+            Reset Token
+          </Button>
+        </HStack>
       )
     }
     else {
@@ -94,7 +119,7 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
                 <VStack spacing="6">
                   <Heading size="md">What is this?</Heading>
                   <Text>Every Microsoft Teams user has a unique token that is used to make changes to your current status. This token is reset about every day or so.</Text>
-                  <Text>I wrote a script to make it easy to get your token after logging into teams on your browser.</Text>
+                  <Text>I wrote a script to make it easy to get your token after logging in to Microsoft Teams on your browser.</Text>
                   <LightMode>
                     <HStack spacing="2" w="100%" justifyContent="space-between">
                       <Button colorScheme="blackAlpha" size="sm" variant="solid" w="216px" >
@@ -113,7 +138,7 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
                   </LightMode>
                   <HStack w="100%">
                     <Input w="100%" variant="outline" placeholder='Paste your teams token here' onChange={(e) => setModalToken(e.target.value)} />
-                    <Button variant="outline" colorScheme="blue" rightIcon={<Icon as={MdSave} w={4} h={4} />} onClick={() => { setDoSave(true); onClose() }}>Save</Button>
+                    <Button variant="outline" colorScheme="blue" rightIcon={<Icon as={MdSave} w={4} h={4} />} onClick={onTrySave}>Save</Button>
                   </HStack>
                 </VStack>
               </ModalBody>
@@ -150,8 +175,6 @@ export default function Dashboard({ code }) {
 
   const accessToken = useAuth(code)
   const [teamsToken, setTeamsToken] = useState(undefined)
-
-  useEffect(() => { console.log("fired") }, [teamsToken])
 
   const [userName, setUserName] = useState("No name")
   const [playingTrack, setPlayingTrack] = useState(
@@ -318,11 +341,15 @@ export default function Dashboard({ code }) {
 
     if (teamsToken != undefined) {
       console.log("test")
-      forcePushToTeams()
+      if (pushToTeams)
+        forcePushToTeams()
     }
   }, [playingTrack])
 
-
+  useEffect(() => {
+    if (pushToTeams)
+      forcePushToTeams()
+  }, [pushToTeams])
 
   useEffect(() => {
     if (teamsToken != undefined) {
@@ -330,6 +357,7 @@ export default function Dashboard({ code }) {
       forcePushToTeams()
     }
   }, [teamsToken])
+
   const DashboardContent = () => {
     if (accessToken != undefined) {
       return (
@@ -340,10 +368,9 @@ export default function Dashboard({ code }) {
             <Box w="100%" h="2px" bg="gray.800" />
             <StatusBar teamsToken={teamsToken} setTeamsToken={setTeamsToken} isPlaying={isPlaying} pauseOrResumeSong={pauseOrResumeSong} setPushToTeams={setPushToTeams} previousSong={previousSong} nextSong={nextSong} />
           </VStack>
-          <Button onClick={() => { forcePushToTeams() }}>Force push to teams</Button>
           <Button onClick={() => {
             outputSongToConsole();
-          }}>Output to console</Button>
+          }}>Output song information to console</Button>
         </VStack>
       )
     }
