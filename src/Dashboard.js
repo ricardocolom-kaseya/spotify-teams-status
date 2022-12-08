@@ -257,9 +257,9 @@ export default function Dashboard({ code }) {
         //console.log(playbackData)
         if (playbackData.body != null && playbackData.body.is_playing) {
           //console.log(playingTrack)
-          let message = { "message": "[𝗦𝗽𝗼𝘁𝗶𝗳𝘆] 𝗟𝗶𝘀𝘁𝗲𝗻𝗶𝗻𝗴 𝘁𝗼: " + playingTrack.artists[0] + " - " + playingTrack.name };
+          let message = { "trackInfo": playingTrack.artists[0] + " - " + playingTrack.name };
 
-          console.log("Pushing to teams -> " + message.message)
+          console.log("Pushing to teams -> " + message.trackInfo)
           axios.put("http://localhost:4000/status", message, {
             headers: {
               "Content-Type": "application/json",
@@ -287,7 +287,7 @@ export default function Dashboard({ code }) {
     // Only change the song info if the user is currently listening to a song.
     spotifyApi.getMyCurrentPlaybackState()
       .then(function (playbackData) {
-        if (playbackData.body.is_playing) {
+        if (playbackData.body != null && playbackData.body.is_playing) {
           setIsPlaying(true)
           // Get the currently playing track.
           spotifyApi.getMyCurrentPlayingTrack()
@@ -342,7 +342,6 @@ export default function Dashboard({ code }) {
     console.log("Track changed")
 
     if (teamsToken != undefined) {
-      console.log("test")
       if (pushToTeams)
         forcePushToTeams()
     }
@@ -355,7 +354,6 @@ export default function Dashboard({ code }) {
 
   useEffect(() => {
     if (teamsToken != undefined) {
-      console.log("test")
       forcePushToTeams()
     }
   }, [teamsToken])
