@@ -19,16 +19,6 @@ let songs = [
         "id": "5XLsxDGnb26aMmuC3BPWxu"
     },
     {
-        "name": "Accident Murderers",
-        "album_name": "Life Is Good (Explicit Version)",
-        "artists": [
-            "Nas",
-            "Rick Ross"
-        ],
-        "img": "https://i.scdn.co/image/ab67616d0000b273bfca10ab09c44462f1cc56ac",
-        "id": "1Z6hAwj1hWuwxal48zSDyY"
-    },
-    {
         "name": "So Cold - Remix",
         "album_name": "We Are Not Alone",
         "artists": [
@@ -56,15 +46,6 @@ let songs = [
         "id": "77loZpT5Y5PRP1S451P9Yz"
     },
     {
-        "name": "Dead Presidents II",
-        "album_name": "Reasonable Doubt",
-        "artists": [
-            "JAY-Z"
-        ],
-        "img": "https://i.scdn.co/image/ab67616d0000b273c467c0b670b01b117ce939f9",
-        "id": "5Kqr27us3rTeuchp9Z6Inf"
-    },
-    {
         "name": "The Ghost of You",
         "album_name": "Three Cheers for Sweet Revenge",
         "artists": [
@@ -81,6 +62,43 @@ let songs = [
         ],
         "img": "https://i.scdn.co/image/ab67616d0000b27308cdafd988bd04d9b14159d3",
         "id": "2yXyz4NLTZx9CLdXfLTp5E"
+    },
+    {
+        "name": "Be Quiet and Drive (Far Away)",
+        "album_name": "Around the Fur",
+        "artists": [
+            "Deftones"
+        ],
+        "img": "https://i.scdn.co/image/ab67616d0000b2730b1129853982ea17845d4eb6",
+        "id": "4Uiw0Sl9yskBaC6P4DcdVD"
+    },
+    {
+        "name": "Change (In the House of Flies)",
+        "album_name": "White Pony",
+        "artists": [
+            "Deftones"
+        ],
+        "img": "https://i.scdn.co/image/ab67616d0000b2735c53799f473fa3e1a48c00ed",
+        "id": "51c94ac31swyDQj9B3Lzs3"
+    },
+    {
+        "name": "Empire State Of Mind",
+        "album_name": "The Blueprint 3",
+        "artists": [
+            "JAY-Z",
+            "Alicia Keys"
+        ],
+        "img": "https://i.scdn.co/image/ab67616d0000b273fec1b815bb3c50a64a90fd10",
+        "id": "2igwFfvr1OAGX9SKDCPBwO"
+    },
+    {
+        "name": "Attack",
+        "album_name": "A Beautiful Lie",
+        "artists": [
+            "Thirty Seconds To Mars"
+        ],
+        "img": "https://i.scdn.co/image/ab67616d0000b273865b538169f199dac610b854",
+        "id": "0lHSJ0ZP8uUPnJXhMdGjOK"
     }
 ]
 

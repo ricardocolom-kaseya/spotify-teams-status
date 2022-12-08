@@ -88,9 +88,11 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
               </Checkbox>
             </LightMode>
           </Button>
-          <Button colorScheme="red" variant="outline" size="sm" onClick={() => { setTeamsToken(undefined) }}>
-            Reset Token
-          </Button>
+          <LightMode>
+            <Button colorScheme="red" _hover={{ backgroundColor: '#00000025' }} _active={{backgroundColor: '#00000050'}} variant="outline" size="sm" onClick={() => { setTeamsToken(undefined) }} color="red.500">
+              Reset Token
+            </Button>
+          </LightMode>
         </HStack>
       )
     }
@@ -122,13 +124,13 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
                   <Text>I wrote a script to make it easy to get your token after logging in to Microsoft Teams on your browser.</Text>
                   <LightMode>
                     <HStack spacing="2" w="100%" justifyContent="space-between">
-                      <Button colorScheme="blackAlpha" size="sm" variant="solid" w="216px" >
+                      <Button colorScheme="blackAlpha" size="sm" variant="solid" w="216px" onClick={() => window.open('https://greasyfork.org/en/scripts/456296-microsoft-teams-status-token-grabber')}>
                         <HStack w="100%">
                           <Icon as={SiTampermonkey} w="20px" h="20px" color="white" />
                           <Text color="white" w="100%">Get the script</Text>
                         </HStack>
                       </Button>
-                      <Button colorScheme="purple" size="sm" variant="solid" w="216px">
+                      <Button colorScheme="purple" size="sm" variant="solid" w="216px" onClick={() => window.open("https://teams.microsoft.com")}>
                         <HStack w="100%">
                           <Icon as={SiMicrosoftteams} w="20px" h="20px" color="white" />
                           <Text color="white" w="100%">Log in to Microsoft Teams</Text>
@@ -312,7 +314,6 @@ export default function Dashboard({ code }) {
                     }
                   )
                 }
-
               }
             }, function (err) {
               console.log('Something went wrong!', err);
@@ -329,6 +330,7 @@ export default function Dashboard({ code }) {
     if (accessToken != undefined) {
       // console.log(accessToken)
       spotifyApi.setAccessToken(accessToken)
+      getCurrentSong();
       getUserInfo();
     }
 
@@ -363,7 +365,7 @@ export default function Dashboard({ code }) {
       return (
         <VStack w="100vw" h="100vh" justify="center" align="center" spacing="6">
           <Text fontSize="2xl">Hey, {userName}</Text>
-          <VStack borderRadius="lg" spacing="0" boxShadow="xl" w="sm">
+          <VStack borderRadius="lg" spacing="0" boxShadow="xl" w="lg">
             <SongCard playingTrack={playingTrack} isPlaying={isPlaying} setIsPlaying={setIsPlaying} pauseOrResumeSong={pauseOrResumeSong} />
             <Box w="100%" h="2px" bg="gray.800" />
             <StatusBar teamsToken={teamsToken} setTeamsToken={setTeamsToken} isPlaying={isPlaying} pauseOrResumeSong={pauseOrResumeSong} setPushToTeams={setPushToTeams} previousSong={previousSong} nextSong={nextSong} />
