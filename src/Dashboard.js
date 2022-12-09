@@ -9,6 +9,7 @@ import { SiMicrosoftteams, SiTampermonkey } from 'react-icons/si'
 import { MdSave } from 'react-icons/md'
 
 import useInterval from './useInterval'
+import TeamsSnippet from './TeamsSnippet'
 
 import {
   Modal,
@@ -100,14 +101,14 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
       return (
         <>
           <LightMode>
-            <Button colorScheme="purple" size="sm" variant="solid" onClick={onOpen}>
+            <Button colorScheme="purple" bg="#444791" size="sm" variant="solid" onClick={onOpen}>
               <HStack>
                 <Icon as={SiMicrosoftteams} w="20px" h="20px" color="white" />
                 <Text color="white">Get your Teams status token</Text>
               </HStack>
             </Button>
           </LightMode>
-          <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg" onCloseComplete={() => {
+          <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl" onCloseComplete={() => {
             if (doSave) {
               setDoSave(false)
               setTeamsToken(modalToken)
@@ -123,14 +124,14 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
                   <Text>Every Microsoft Teams user has a unique token that is used to make changes to your current status. This token is reset about every day or so.</Text>
                   <Text>I wrote a script to make it easy to get your token after logging in to Microsoft Teams on your browser.</Text>
                   <LightMode>
-                    <HStack spacing="2" w="100%" justifyContent="space-between">
-                      <Button colorScheme="blackAlpha" size="sm" variant="solid" w="216px" onClick={() => window.open('https://greasyfork.org/en/scripts/456296-microsoft-teams-status-token-grabber')}>
+                    <HStack spacing="2" w="80%" justifyContent="space-between">
+                      <Button colorScheme="blackAlpha" _hover={{bg: '#272e3d'}} size="sm" variant="solid" w="216px" onClick={() => window.open('https://greasyfork.org/en/scripts/456296-microsoft-teams-status-token-grabber')}>
                         <HStack w="100%">
                           <Icon as={SiTampermonkey} w="20px" h="20px" color="white" />
                           <Text color="white" w="100%">Get the script</Text>
                         </HStack>
                       </Button>
-                      <Button colorScheme="purple" size="sm" variant="solid" w="216px" onClick={() => window.open("https://teams.microsoft.com")}>
+                      <Button colorScheme="purple" bg="#444791" size="sm" variant="solid" w="216px" onClick={() => window.open("https://teams.microsoft.com")}>
                         <HStack w="100%">
                           <Icon as={SiMicrosoftteams} w="20px" h="20px" color="white" />
                           <Text color="white" w="100%">Log in to Microsoft Teams</Text>
@@ -138,6 +139,7 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
                       </Button>
                     </HStack>
                   </LightMode>
+                  <TeamsSnippet />
                   <HStack w="100%">
                     <Input w="100%" variant="outline" placeholder='Paste your teams token here' onChange={(e) => setModalToken(e.target.value)} />
                     <Button variant="outline" colorScheme="blue" rightIcon={<Icon as={MdSave} w={4} h={4} />} onClick={onTrySave}>Save</Button>
