@@ -12,12 +12,6 @@ export default function Login() {
   const [randomSong, setRandomSong] = useState(pickRandomSong())
   const [randomName, setRandomName] = useState(faker.name.firstName() + " " + faker.name.lastName());
 
-  const MS_PER_MINUTE = 60000;
-  let now = new Date()
-  console.log(now.toTimeString())
-  now.setMinutes(now.getMinutes() + 8)
-  console.log(now.toTimeString())
-
   return (
     <VStack h="100vh" w="100vw" justify="center" spacing="12">
       <Heading as="h1" size="xl" m="4">Spotify x Microsoft Teams Status</Heading>

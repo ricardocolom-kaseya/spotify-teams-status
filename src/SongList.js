@@ -99,6 +99,24 @@ let songs = [
         ],
         "img": "https://i.scdn.co/image/ab67616d0000b273865b538169f199dac610b854",
         "id": "0lHSJ0ZP8uUPnJXhMdGjOK"
+    },
+    {
+        "name": "Today",
+        "album_name": "(Rotten Apples) The Smashing Pumpkins Greatest Hits",
+        "artists": [
+            "The Smashing Pumpkins"
+        ],
+        "img": "https://i.scdn.co/image/ab67616d0000b273c48f42fdafcffcedbdbce025",
+        "id": "1XPta4VLT78HQnVFd1hlsK"
+    },
+    {
+        "name": "Kill Bill",
+        "album_name": "SOS",
+        "artists": [
+            "SZA"
+        ],
+        "img": "https://i.scdn.co/image/ab67616d0000b27370dbc9f47669d120ad874ec1",
+        "id": "3OHfY25tqY28d16oZczHc8"
     }
 ]
 

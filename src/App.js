@@ -8,15 +8,19 @@ const code = new URLSearchParams(window.location.search).get('code')
 
 const LoginOrDashboard = () => {
   if(code)
+  {
+    console.log('rendering dashboard...')
     return <Dashboard code={code} />
+  }
   else
     return <Login />
 }
 
 function App() {
+
   return (
     <ChakraProvider>
-      {LoginOrDashboard()}
+      <LoginOrDashboard />
     </ChakraProvider>
   );
 }

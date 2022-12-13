@@ -21,6 +21,8 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react'
 
+import useTeamsToken from './useTeamsToken'
+
 const spotifyApi = new SpotifyWebApi({
   clientId: "a248cdcebd804022917a3c7fc1d66d76",
 })
@@ -55,31 +57,28 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [modalToken, setModalToken] = useState("")
-  const [doSave, setDoSave] = useState(false)
+  const [modalToken, setModalToken] = useState(teamsToken)
 
-  function onTrySave() {
-    console.log("Trying to save...")
-    let message = {}
-    axios.put("http://localhost:4000/status", message, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${modalToken}`
-      }
-    }).then(res => {
-      if (res.data == 'OK') {
-        console.log(res.data)
-        setDoSave(true)
-        onClose();
-      }
-    }).catch((err) => {
-      console.log(err.response.status)
-      console.log("Token is invalid or expired, please copy a new one")
-    })
+  const { checkValidity, isValid, changeIsValid } = useTeamsToken()
+
+  useEffect(() => {
+    trySave()
+  }, [])
+
+  function trySave() {
+    checkValidity(modalToken)
   }
 
+  useEffect(() => {
+    console.log(isValid)
+    if (isValid) {
+      localStorage.setItem('teamsToken', modalToken)
+      onClose();
+    }
+  }, [isValid])
+
   const teamsButton = () => {
-    if (teamsToken) {
+    if (isValid) {
       return (
         <HStack w="100%" justify="space-around">
           <Button colorScheme="purple" size="sm" variant="ghost" p="0">
@@ -90,7 +89,7 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
             </LightMode>
           </Button>
           <LightMode>
-            <Button colorScheme="red" _hover={{ backgroundColor: '#00000025' }} _active={{backgroundColor: '#00000050'}} variant="outline" size="sm" onClick={() => { setTeamsToken(undefined) }} color="red.500">
+            <Button colorScheme="red" _hover={{ backgroundColor: '#00000025' }} _active={{ backgroundColor: '#00000050' }} variant="outline" size="sm" onClick={() => { setTeamsToken(undefined) }} color="red.500">
               Reset Token
             </Button>
           </LightMode>
@@ -109,8 +108,7 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
             </Button>
           </LightMode>
           <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl" onCloseComplete={() => {
-            if (doSave) {
-              setDoSave(false)
+            if (isValid) {
               setTeamsToken(modalToken)
             }
           }}>
@@ -125,7 +123,7 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
                   <Text>I wrote a script to make it easy to get your token after logging in to Microsoft Teams on your browser.</Text>
                   <LightMode>
                     <HStack spacing="2" w="80%" justifyContent="space-between">
-                      <Button colorScheme="blackAlpha" _hover={{bg: '#272e3d'}} size="sm" variant="solid" w="216px" onClick={() => window.open('https://greasyfork.org/en/scripts/456296-microsoft-teams-status-token-grabber')}>
+                      <Button colorScheme="blackAlpha" _hover={{ bg: '#272e3d' }} size="sm" variant="solid" w="216px" onClick={() => window.open('https://greasyfork.org/en/scripts/456296-microsoft-teams-status-token-grabber')}>
                         <HStack w="100%">
                           <Icon as={SiTampermonkey} w="20px" h="20px" color="white" />
                           <Text color="white" w="100%">Get the script</Text>
@@ -142,7 +140,7 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
                   <TeamsSnippet />
                   <HStack w="100%">
                     <Input w="100%" variant="outline" placeholder='Paste your teams token here' onChange={(e) => setModalToken(e.target.value)} />
-                    <Button variant="outline" colorScheme="blue" rightIcon={<Icon as={MdSave} w={4} h={4} />} onClick={onTrySave}>Save</Button>
+                    <Button variant="outline" colorScheme="blue" rightIcon={<Icon as={MdSave} w={4} h={4} />} onClick={() => { trySave() }}>Save</Button>
                   </HStack>
                 </VStack>
               </ModalBody>
@@ -178,7 +176,8 @@ const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, se
 export default function Dashboard({ code }) {
 
   const accessToken = useAuth(code)
-  const [teamsToken, setTeamsToken] = useState(undefined)
+
+  const [teamsToken, setTeamsToken] = useState(localStorage.getItem('teamsToken'))
 
   const [userName, setUserName] = useState("No name")
   const [playingTrack, setPlayingTrack] = useState(
@@ -253,6 +252,8 @@ export default function Dashboard({ code }) {
   }
 
   function forcePushToTeams() {
+    if (accessToken == undefined)
+      return;
     // Only do a push if the user is listening to a song.
     spotifyApi.getMyCurrentPlaybackState()
       .then(function (playbackData) {
@@ -329,8 +330,10 @@ export default function Dashboard({ code }) {
   }
 
   useEffect(() => {
+
+    console.log(accessToken)
+
     if (accessToken != undefined) {
-      // console.log(accessToken)
       spotifyApi.setAccessToken(accessToken)
       getCurrentSong();
       getUserInfo();
@@ -341,21 +344,21 @@ export default function Dashboard({ code }) {
   useInterval(() => getCurrentSong(), 1000)
 
   useEffect(() => {
-    console.log("Track changed")
-
-    if (teamsToken != undefined) {
+    if (accessToken != undefined && teamsToken != undefined) {
+      console.log("Track changed")
       if (pushToTeams)
         forcePushToTeams()
     }
   }, [playingTrack])
 
   useEffect(() => {
-    if (pushToTeams)
+    if (accessToken != undefined && pushToTeams) {
       forcePushToTeams()
+    }
   }, [pushToTeams])
 
   useEffect(() => {
-    if (teamsToken != undefined) {
+    if (accessToken != undefined && teamsToken != undefined) {
       forcePushToTeams()
     }
   }, [teamsToken])
