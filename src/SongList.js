@@ -1,14 +1,5 @@
 let songs = [
     {
-        "name": "Headstrong",
-        "album_name": "Trapt",
-        "artists": [
-            "Trapt"
-        ],
-        "img": "https://i.scdn.co/image/ab67616d0000b27374d9a833744be96426ee833c",
-        "id": "1AEYT6VxrxXPMoQUxsY0E4"
-    },
-    {
         "name": "Loco-Motive",
         "album_name": "Life is Good",
         "artists": [
@@ -73,6 +64,15 @@ let songs = [
         "id": "4Uiw0Sl9yskBaC6P4DcdVD"
     },
     {
+        "name": "Entombed",
+        "album_name": "Koi No Yokan",
+        "artists": [
+            "Deftones"
+        ],
+        "img": "https://i.scdn.co/image/ab67616d0000b27373652b7a0dc388dd1d044b69",
+        "id": "4bLCPfBLKlqiONo6TALTh5"
+    },
+    {
         "name": "Change (In the House of Flies)",
         "album_name": "White Pony",
         "artists": [
@@ -117,6 +117,15 @@ let songs = [
         ],
         "img": "https://i.scdn.co/image/ab67616d0000b27370dbc9f47669d120ad874ec1",
         "id": "3OHfY25tqY28d16oZczHc8"
+    },
+    {
+        "name": "ALMOST READY",
+        "album_name": "LIFE IN HELL",
+        "artists": [
+            "Lancey Foux"
+        ],
+        "img": "https://i.scdn.co/image/ab67616d0000b2735e156af0dc2f178d7371da81",
+        "id": "2Jl9fe9i1HNUD8TIECdg2G"
     }
 ]
 

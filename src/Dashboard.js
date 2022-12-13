@@ -3,175 +3,18 @@ import useAuth from './useAuth'
 
 import axios from 'axios'
 import SpotifyWebApi from "spotify-web-api-node"
-import { Button, HStack, VStack, Text, Box, Image, Checkbox, IconButton, Icon, Divider, LightMode, useDisclosure, Heading, Input } from '@chakra-ui/react'
-import { FaPlay, FaPause, FaStepBackward, FaStepForward } from 'react-icons/fa'
-import { SiMicrosoftteams, SiTampermonkey } from 'react-icons/si'
-import { MdSave } from 'react-icons/md'
+import { Button, HStack, VStack, Text, Box, Image } from '@chakra-ui/react'
 
 import useInterval from './useInterval'
-import TeamsSnippet from './TeamsSnippet'
 
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react'
+import SongCard from './components/SongCard'
+import StatusBar from './components/StatusBar'
 
 import useTeamsToken from './useTeamsToken'
 
 const spotifyApi = new SpotifyWebApi({
   clientId: "a248cdcebd804022917a3c7fc1d66d76",
 })
-
-const SongCard = ({ playingTrack }) => {
-
-  let allArtists = "";
-
-  if ((playingTrack.artists).length > 1) {
-    playingTrack.artists.forEach(name => {
-      if ((playingTrack.artists).indexOf(name) != playingTrack.artists.length - 1)
-        allArtists += name + ", "
-      else
-        allArtists += name
-    });
-  }
-  else
-    allArtists = playingTrack.artists[0]
-
-  return (
-    <HStack bg="gray.700" spacing="2" w="100%" align="center" p="3" borderTopRadius="lg">
-      <Image src={playingTrack.img} w="128px" h="128px" fallbackSrc='https://via.placeholder.com/128/FFFFFF/000000' objectFit="contain" borderRadius="md" />
-      <VStack w="100%" align="left" spacing="0" px="4">
-        <Text fontSize="xl" fontWeight="bold">{playingTrack.name}</Text>
-        <Text fontSize="lg">{allArtists}</Text>
-      </VStack>
-    </HStack>
-  )
-}
-
-const StatusBar = ({ teamsToken, setTeamsToken, isPlaying, pauseOrResumeSong, setPushToTeams, previousSong, nextSong }) => {
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const [modalToken, setModalToken] = useState(teamsToken)
-
-  const { checkValidity, isValid, changeIsValid } = useTeamsToken()
-
-  useEffect(() => {
-    trySave()
-  }, [])
-
-  function trySave() {
-    checkValidity(modalToken)
-  }
-
-  useEffect(() => {
-    console.log(isValid)
-    if (isValid) {
-      localStorage.setItem('teamsToken', modalToken)
-      onClose();
-    }
-  }, [isValid])
-
-  const teamsButton = () => {
-    if (isValid) {
-      return (
-        <HStack w="100%" justify="space-around">
-          <Button colorScheme="purple" size="sm" variant="ghost" p="0">
-            <LightMode>
-              <Checkbox size="md" colorScheme="purple" spacing="4" p="4" onChange={(e) => { setPushToTeams(e.target.checked); window.localStorage.setItem("pushToTeams", e.target.checked) }} defaultChecked={window.localStorage.getItem("pushToTeams") == "true" ? true : false}>
-                <Text color="white">Push to Teams</Text>
-              </Checkbox>
-            </LightMode>
-          </Button>
-          <LightMode>
-            <Button colorScheme="red" _hover={{ backgroundColor: '#00000025' }} _active={{ backgroundColor: '#00000050' }} variant="outline" size="sm" onClick={() => { setTeamsToken(undefined) }} color="red.500">
-              Reset Token
-            </Button>
-          </LightMode>
-        </HStack>
-      )
-    }
-    else {
-      return (
-        <>
-          <LightMode>
-            <Button colorScheme="purple" bg="#444791" size="sm" variant="solid" onClick={onOpen}>
-              <HStack>
-                <Icon as={SiMicrosoftteams} w="20px" h="20px" color="white" />
-                <Text color="white">Get your Teams status token</Text>
-              </HStack>
-            </Button>
-          </LightMode>
-          <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl" onCloseComplete={() => {
-            if (isValid) {
-              setTeamsToken(modalToken)
-            }
-          }}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Get your Teams status token</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <VStack spacing="6">
-                  <Heading size="md">What is this?</Heading>
-                  <Text>Every Microsoft Teams user has a unique token that is used to make changes to your current status. This token is reset about every day or so.</Text>
-                  <Text>I wrote a script to make it easy to get your token after logging in to Microsoft Teams on your browser.</Text>
-                  <LightMode>
-                    <HStack spacing="2" w="80%" justifyContent="space-between">
-                      <Button colorScheme="blackAlpha" _hover={{ bg: '#272e3d' }} size="sm" variant="solid" w="216px" onClick={() => window.open('https://greasyfork.org/en/scripts/456296-microsoft-teams-status-token-grabber')}>
-                        <HStack w="100%">
-                          <Icon as={SiTampermonkey} w="20px" h="20px" color="white" />
-                          <Text color="white" w="100%">Get the script</Text>
-                        </HStack>
-                      </Button>
-                      <Button colorScheme="purple" bg="#444791" size="sm" variant="solid" w="216px" onClick={() => window.open("https://teams.microsoft.com")}>
-                        <HStack w="100%">
-                          <Icon as={SiMicrosoftteams} w="20px" h="20px" color="white" />
-                          <Text color="white" w="100%">Log in to Microsoft Teams</Text>
-                        </HStack>
-                      </Button>
-                    </HStack>
-                  </LightMode>
-                  <TeamsSnippet />
-                  <HStack w="100%">
-                    <Input w="100%" variant="outline" placeholder='Paste your teams token here' onChange={(e) => setModalToken(e.target.value)} />
-                    <Button variant="outline" colorScheme="blue" rightIcon={<Icon as={MdSave} w={4} h={4} />} onClick={() => { trySave() }}>Save</Button>
-                  </HStack>
-                </VStack>
-              </ModalBody>
-            </ModalContent>
-            <ModalFooter>
-              <LightMode>
-                <Button colorScheme='blue' mr={3} onClick={onClose}>
-                  Close
-                </Button>
-                <Button variant='ghost'>Secondary Action</Button>
-              </LightMode>
-            </ModalFooter>
-          </Modal>
-        </>
-      )
-    }
-  }
-
-  return (
-    <VStack w="100%" bg="gray.700" borderBottomRadius="lg" p="2">
-      <HStack w="100%" spacing="0" justify="center">
-        <IconButton variant="ghost" icon={<Icon as={FaStepBackward} />} onClick={() => previousSong()} />
-        <IconButton variant="ghost" icon={isPlaying ? <Icon as={FaPause} /> : <Icon as={FaPlay} />} onClick={() => pauseOrResumeSong()} />
-        <IconButton variant="ghost" icon={<Icon as={FaStepForward} />} onClick={() => nextSong()} />
-      </HStack>
-      <HStack w="100%" justify="center" pb="2">
-        {teamsButton()}
-      </HStack>
-    </VStack>
-  )
-}
 
 export default function Dashboard({ code }) {
 
@@ -196,8 +39,6 @@ export default function Dashboard({ code }) {
 
   function outputSongToConsole() {
     let artists = []
-
-    console.log(playingTrack.artists)
 
     playingTrack.artists.forEach(artist => {
       artists.push(artist)
@@ -330,9 +171,7 @@ export default function Dashboard({ code }) {
   }
 
   useEffect(() => {
-
-    console.log(accessToken)
-
+    //console.log(accessToken)
     if (accessToken != undefined) {
       spotifyApi.setAccessToken(accessToken)
       getCurrentSong();
@@ -371,7 +210,7 @@ export default function Dashboard({ code }) {
           <VStack borderRadius="lg" spacing="0" boxShadow="xl" w="lg">
             <SongCard playingTrack={playingTrack} isPlaying={isPlaying} setIsPlaying={setIsPlaying} pauseOrResumeSong={pauseOrResumeSong} />
             <Box w="100%" h="2px" bg="gray.800" />
-            <StatusBar teamsToken={teamsToken} setTeamsToken={setTeamsToken} isPlaying={isPlaying} pauseOrResumeSong={pauseOrResumeSong} setPushToTeams={setPushToTeams} previousSong={previousSong} nextSong={nextSong} />
+            <StatusBar teamsToken={teamsToken} setTeamsToken={setTeamsToken} isPlaying={isPlaying} pauseOrResumeSong={pauseOrResumeSong} setPushToTeams={setPushToTeams} previousSong={previousSong} nextSong={nextSong} useTeamsToken={useTeamsToken} />
           </VStack>
           <Button onClick={() => {
             outputSongToConsole();
@@ -382,12 +221,6 @@ export default function Dashboard({ code }) {
   }
 
   return (
-    <div>
-      {/* <Text pos="absolute" top="0" right="0">
-        {accessToken}
-      </Text> */}
-
-      {DashboardContent()}
-    </div>
+    <DashboardContent />
   )
 }

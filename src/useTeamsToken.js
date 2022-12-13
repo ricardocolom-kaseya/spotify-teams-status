@@ -6,7 +6,6 @@ export default function useTeamsToken() {
     const [isValid, changeIsValid] = useState(false)
 
     function checkValidity(modalToken) {
-        console.log(modalToken)
         let body = {}
         axios.put("http://localhost:4000/status", body, {
             headers: {
