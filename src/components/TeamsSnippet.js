@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function TeamsSnippet() {
     return (
-        <VStack spacing="0" w="100%" borderRadius="lg" bg="#444791" transform="scale(0.8)">
+        <VStack spacing="0" w="100%" color="white" borderRadius="lg" bg="#444791" transform="scale(0.8)">
             <Icon as={TbArrowUpRight} pos="absolute" right="56" w="8" h="8" color="red" top="8"/>
             <HStack w="100%" justify="space-between" spacing="0" h="36px" align="center">
                 <HStack justify="left" spacing="2" w="25%" px="2">

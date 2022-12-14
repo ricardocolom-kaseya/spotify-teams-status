@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import useAuth from './useAuth'
 
 import axios from 'axios'
 import SpotifyWebApi from "spotify-web-api-node"
-import { Button, HStack, VStack, Text, Box, Image } from '@chakra-ui/react'
+import { Button, HStack, VStack, Text, Box, Image, useColorMode } from '@chakra-ui/react'
 
 import useInterval from './useInterval'
 
@@ -11,12 +11,15 @@ import SongCard from './components/SongCard'
 import StatusBar from './components/StatusBar'
 
 import useTeamsToken from './useTeamsToken'
+import ToggleColorButton from './components/ToggleColorButton'
 
 const spotifyApi = new SpotifyWebApi({
   clientId: "a248cdcebd804022917a3c7fc1d66d76",
 })
 
 export default function Dashboard({ code }) {
+
+  const { colorMode, toggleColorMode } = useColorMode()
 
   const accessToken = useAuth(code)
 
@@ -170,17 +173,15 @@ export default function Dashboard({ code }) {
       })
   }
 
+  useInterval(() => {getCurrentSong()}, 1000)
+
   useEffect(() => {
-    //console.log(accessToken)
     if (accessToken != undefined) {
       spotifyApi.setAccessToken(accessToken)
-      getCurrentSong();
       getUserInfo();
     }
 
   }, [accessToken])
-
-  useInterval(() => getCurrentSong(), 1000)
 
   useEffect(() => {
     if (accessToken != undefined && teamsToken != undefined) {
@@ -202,25 +203,34 @@ export default function Dashboard({ code }) {
     }
   }, [teamsToken])
 
+  useEffect(() => {
+    console.log('Mounting Dashboard')
+
+    return(() => {console.log('Unmounting Dashboard')})
+  }, [])
+
   const DashboardContent = () => {
-    if (accessToken != undefined) {
-      return (
-        <VStack w="100vw" h="100vh" justify="center" align="center" spacing="6">
-          <Text fontSize="2xl">Hey, {userName}</Text>
-          <VStack borderRadius="lg" spacing="0" boxShadow="xl" w="lg">
-            <SongCard playingTrack={playingTrack} isPlaying={isPlaying} setIsPlaying={setIsPlaying} pauseOrResumeSong={pauseOrResumeSong} />
-            <Box w="100%" h="2px" bg="gray.800" />
-            <StatusBar teamsToken={teamsToken} setTeamsToken={setTeamsToken} isPlaying={isPlaying} pauseOrResumeSong={pauseOrResumeSong} setPushToTeams={setPushToTeams} previousSong={previousSong} nextSong={nextSong} useTeamsToken={useTeamsToken} />
-          </VStack>
-          <Button onClick={() => {
-            outputSongToConsole();
-          }}>Output song information to console</Button>
+
+    console.log('dashboard content' + accessToken)
+    return (
+      <VStack w="100vw" h="100vh" justify="center" align="center" spacing="6">
+        <Text fontSize="2xl">Hey, {userName}</Text>
+        <VStack borderRadius="lg" spacing="0" boxShadow="md" w="lg">
+          <SongCard playingTrack={playingTrack} isPlaying={isPlaying} setIsPlaying={setIsPlaying} pauseOrResumeSong={pauseOrResumeSong} />
+          <Box w="100%" h="2px" bg={colorMode === 'light' ? "gray.300" : "gray.800"} />
+          <StatusBar teamsToken={teamsToken} setTeamsToken={setTeamsToken} isPlaying={isPlaying} pauseOrResumeSong={pauseOrResumeSong} setPushToTeams={setPushToTeams} previousSong={previousSong} nextSong={nextSong} useTeamsToken={useTeamsToken} />
         </VStack>
-      )
-    }
+        <Button onClick={() => {
+          outputSongToConsole();
+        }}>Output song information to console</Button>
+      </VStack>
+    )
   }
 
   return (
-    <DashboardContent />
+    <>
+      <ToggleColorButton toggleColorMode={toggleColorMode} />
+      {(accessToken) ? <DashboardContent /> : null}
+    </>
   )
 }
